@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoxAI | Live Speech Translator</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<main class="container">
+    <header class="topbar">
+        <div class="brand-icon">V</div>
+        <div>
+            <h1>VoxAI</h1>
+            <p>Multilingual Speech Intelligence</p>
+        </div>
+        <span class="cpu-badge">CPU MODE</span>
+    </header>
+
+    <section class="hero">
+        <p class="eyebrow">REAL-TIME SPEECH AI</p>
+        <h2>Your voice, <span>understood globally.</span></h2>
+        <p class="hero-text">
+            Speak naturally and watch your transcript update as you talk.
+        </p>
+    </section>
+
+    <section class="settings panel">
+        <div class="field">
+            <label for="speechLanguage">Spoken language</label>
+            <select id="speechLanguage">
+                {% for code, name in speech_languages.items() %}
+                <option value="{{ code }}"
+                    {% if code == 'auto' %}selected{% endif %}>
+                    {{ name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="swap-icon">→</div>
+
+        <div class="field">
+            <label for="targetLanguage">Translate into</label>
+            <select id="targetLanguage">
+                {% for code, name in output_languages.items() %}
+                <option value="{{ code }}"
+                    {% if code == 'hi' %}selected{% endif %}>
+                    {{ name }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+    </section>
+
+    <section class="mic-panel panel">
+        <div class="mic-orbit" id="micOrbit">
+            <button id="startButton" class="mic-button"
+                    aria-label="Start microphone">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <rect x="9" y="2" width="6" height="13" rx="3"></rect>
+                    <path d="M5 10v2a7 7 0 0 0 14 0v-2"></path>
+                    <path d="M12 19v3M9 22h6"></path>
+                </svg>
+            </button>
+        </div>
+
+        <h3 id="statusTitle">Ready to listen?</h3>
+        <p id="statusText">Choose languages and press Start.</p>
+
+        <div class="status-row">
+            <span id="statusDot" class="status-dot"></span>
+            <span id="statusLabel">Microphone off</span>
+            <span class="timer" id="timer">00:00</span>
+        </div>
+
+        <button id="stopButton" class="stop-button" disabled>
+            Stop &amp; finish
+        </button>
+    </section>
+
+    <div class="results-heading">
+        <div>
+            <h3>Live results</h3>
+            <p>Text appears here while you speak</p>
+        </div>
+        <button id="clearButton" class="secondary-button">Clear all</button>
+    </div>
+
+    <section class="results-grid">
+        <article class="result-card panel">
+            <div class="card-heading">
+                <div class="card-icon">Aa</div>
+                <div>
+                    <h3>Original transcript</h3>
+                    <p id="detectedLanguage">Waiting for speech</p>
+                </div>
+            </div>
+            <div id="originalText" class="transcript"
+                 aria-live="polite">Your spoken words will appear here...</div>
+            <div class="card-actions">
+                <button class="secondary-button" data-copy="originalText">Copy</button>
+                <button class="secondary-button" data-download="originalText">Download</button>
+            </div>
+        </article>
+
+        <article class="result-card panel">
+            <div class="card-heading">
+                <div class="card-icon translate-icon">文</div>
+                <div>
+                    <h3>Translated text</h3>
+                    <p id="targetLabel">Hindi</p>
+                </div>
+            </div>
+            <div id="translatedText" class="transcript"
+                 aria-live="polite">Translation will appear here...</div>
+            <div class="card-actions">
+                <button class="secondary-button" data-copy="translatedText">Copy</button>
+                <button class="secondary-button" data-download="translatedText">Download</button>
+            </div>
+        </article>
+    </section>
+
+    <p class="footer-note">
+        Faster-Whisper · Flask · Live microphone transcription
+    </p>
+</main>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
